@@ -6,7 +6,7 @@ import { UserButton } from '@clerk/nextjs';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export default function DashboardPage() {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showAddOrder, setShowAddOrder] = useState(false);
