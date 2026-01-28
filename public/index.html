@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrderGuard - Stop Losing Money on Etsy Refunds</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Bricolage+Grotesque:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #FF3B30;
+      --primary-dark: #D32F2F;
+      --secondary: #FFD60A;
+      --dark: #0A0A0A;
+      --light: #FAFAFA;
+      --gray: #6B7280;
+      --accent-green: #34D399;
+    }
+
+    body {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #FF3B30 0%, #D32F2F 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 214, 10, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+      animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0 4rem 0;
+      animation: slideDown 0.8s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-cta {
+      background: white;
+      color: var(--primary);
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 5.5rem);
+      font-weight: 800;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.03em;
+      animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      color: rgba(255,255,255,0.95);
+      margin-bottom: 2.5rem;
+      font-weight: 500;
+      animation: fadeInUp 1s ease-out 0.4s both;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--secondary);
+      color: var(--dark);
+      padding: 1.25rem 3rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: 0 10px 40px rgba(255, 214, 10, 0.4);
+      animation: fadeInUp 1s ease-out 0.6s both, float 3s ease-in-out 2s infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .hero-cta:hover {
+      transform: scale(1.05) translateY(-3px);
+      box-shadow: 0 15px 50px rgba(255, 214, 10, 0.5);
+    }
+
+    .social-proof {
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      animation: fadeInUp 1s ease-out 0.8s both;
+    }
+
+    .stat {
+      color: white;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      font-family: 'Syne', sans-serif;
+    }
+
+    .stat-label {
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    /* Problem Section */
+    .section {
+      padding: 8rem 2rem;
+      position: relative;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 3rem;
+      letter-spacing: -0.02em;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .problem-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border-left: 4px solid var(--primary);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .problem-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+    }
+
+    .problem-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .problem-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .problem-text {
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    /* Solution Section */
+    .solution-section {
+      background: var(--dark);
+      color: white;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .feature-card {
+      background: rgba(255,255,255,0.05);
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--primary);
+      transform: translateY(-5px);
+    }
+
+    .feature-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-text {
+      color: rgba(255,255,255,0.8);
+      line-height: 1.7;
+    }
+
+    /* Pricing Section */
+    .pricing-card {
+      background: white;
+      max-width: 500px;
+      margin: 4rem auto;
+      padding: 3rem;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      text-align: center;
+      border: 3px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing-badge {
+      position: absolute;
+      top: 20px;
+      right: -35px;
+      background: var(--secondary);
+      color: var(--dark);
+      padding: 0.5rem 3rem;
+      font-weight: 700;
+      transform: rotate(45deg);
+      font-size: 0.85rem;
+    }
+
+    .pricing-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 4rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      margin: 1rem 0;
+    }
+
+    .pricing-period {
+      font-size: 1.25rem;
+      color: var(--gray);
+      margin-bottom: 2rem;
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .pricing-features li {
+      padding: 0.75rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .pricing-features li:last-child {
+      border-bottom: none;
+    }
+
+    .check {
+      color: var(--accent-green);
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .cta-button {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      padding: 1.25rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 2rem;
+    }
+
+    .cta-button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(255, 59, 48, 0.3);
+    }
+
+    /* CTA Section */
+    .final-cta {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      text-align: center;
+      color: white;
+    }
+
+    .final-cta h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+    }
+
+    .final-cta p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.6);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: 1rem;
+      }
+
+      .nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .social-proof {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .section {
+        padding: 4rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <nav class="nav">
+        <div class="logo">OrderGuard</div>
+        <a href="https://orderguard-dashboard.vercel.app" class="nav-cta">Sign In</a>
+      </nav>
+
+      <h1>Stop Losing Money<br>on Etsy Refunds</h1>
+      <p class="hero-subtitle">
+        Track every order. Spot delivery issues before they become refunds.<br>
+        Save your shop from bad reviews and disputes.
+      </p>
+
+      <a href="https://orderguard-dashboard.vercel.app" class="hero-cta">
+        Start Free Trial
+        <span>→</span>
+      </a>
+
+      <div class="social-proof">
+        <div class="stat">
+          <div class="stat-number">94%</div>
+          <div class="stat-label">Refunds Prevented</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">$3.2K</div>
+          <div class="stat-label">Avg. Saved/Month</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">2 min</div>
+          <div class="stat-label">Setup Time</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Every Etsy Seller's Nightmare</h2>
+
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-icon">💸</div>
+          <h3 class="problem-title">Surprise Refund Requests</h3>
+          <p class="problem-text">
+            Your package is stuck somewhere. You find out when the buyer opens a case.
+            Money gone. Review ruined. Too late to fix.
+          </p>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-icon">📦</div>
+          <h3 class="problem-title">Tracking Chaos</h3>
+          <p class="problem-text">
+            Checking 50+ tracking numbers manually? Impossible. Miss one delayed shipment
+            and you've got an angry customer demanding a refund.
+          </p>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-icon">⭐</div>
+          <h3 class="problem-title">Review Damage</h3>
+          <p class="problem-text">
+            One bad review from a shipping issue can tank your shop. You can't control
+            USPS, but you take the hit.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solution Section -->
+  <section class="section solution-section">
+    <div class="container">
+      <h2 class="section-title" style="color: white;">How OrderGuard Protects Your Shop</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-title">Automatic Tracking</h3>
+          <p class="feature-text">
+            We monitor every package 24/7. No more manual checking. Get instant alerts
+            when something goes wrong.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚠️</div>
+          <h3 class="feature-title">Early Warning System</h3>
+          <p class="feature-text">
+            Spot delivery problems before your customer does. Yellow and red flags
+            show exactly which orders need attention.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3 class="feature-title">Ready-to-Send Messages</h3>
+          <p class="feature-text">
+            We write the perfect customer message for every situation. Copy, paste,
+            send. Keep buyers happy and informed.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Simple Dashboard</h3>
+          <p class="feature-text">
+            See all your orders in one place. Sort by risk level. Focus on what
+            matters. No spreadsheets needed.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3 class="feature-title">2-Minute Setup</h3>
+          <p class="feature-text">
+            Add your tracking numbers. That's it. No complicated integration.
+            No tech skills required.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3 class="feature-title">Save Money</h3>
+          <p class="feature-text">
+            Prevent refunds before they happen. One saved $100 order pays for
+            5 months of OrderGuard.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Simple, Honest Pricing</h2>
+
+      <div class="pricing-card">
+        <div class="pricing-badge">BETA SPECIAL</div>
+        <h3 style="font-size: 1.5rem; margin-top: 1rem;">Pro Plan</h3>
+        <div class="pricing-price">$19</div>
+        <div class="pricing-period">per month</div>
+
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> Unlimited orders</li>
+          <li><span class="check">✓</span> 24/7 tracking monitoring</li>
+          <li><span class="check">✓</span> Risk alerts</li>
+          <li><span class="check">✓</span> Pre-written messages</li>
+          <li><span class="check">✓</span> Email notifications</li>
+          <li><span class="check">✓</span> Priority support</li>
+        </ul>
+
+        <button class="cta-button" onclick="window.location.href='https://orderguard-dashboard.vercel.app'">
+          Start 7-Day Free Trial
+        </button>
+
+        <p style="margin-top: 1.5rem; color: var(--gray); font-size: 0.9rem;">
+          No credit card required • Cancel anytime • Money-back guarantee
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="section final-cta">
+    <div class="container">
+      <h2>Ready to Protect Your Shop?</h2>
+      <p>Join Etsy sellers who've stopped losing money on refunds.</p>
+      <a href="https://orderguard-dashboard.vercel.app" class="hero-cta">
+        Get Started Free
+        <span>→</span>
+      </a>
+      <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+        7-day free trial • No credit card required
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 OrderGuard. Built for Etsy sellers who care about their shops.</p>
+      <p style="margin-top: 1rem;">
+        <a href="mailto:support@orderguard.co">support@orderguard.co</a> •
+        <a href="#">Terms</a> •
+        <a href="#">Privacy</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
