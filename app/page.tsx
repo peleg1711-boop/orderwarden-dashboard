@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, useUser } from '@clerk/nextjs';
+import { redirect } from 'next/navigation';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -18,6 +19,15 @@ interface Order {
 }
 
 export default function DashboardPage() {
+  const { isLoaded, isSignedIn } = useUser();
+
+  // Redirect logged-out users to landing page
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      window.location.href = 'https://landing.orderwarden.com';
+    }
+  }, [isLoaded, isSignedIn]);
+
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
