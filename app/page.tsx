@@ -53,7 +53,7 @@ export default function DashboardPage() {
     }
   };
 
-  const getRiskColor = (riskLevel) => {
+  const getRiskColor = (riskLevel: string | null | undefined) => {
     switch (riskLevel?.toLowerCase()) {
       case 'green': return 'bg-green-100 text-green-800';
       case 'yellow': return 'bg-yellow-100 text-yellow-800';
@@ -62,7 +62,7 @@ export default function DashboardPage() {
     }
   };
 
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: string | null) => {
     const statusMap = {
       'pre_transit': { label: 'Pre-Transit', color: 'bg-blue-100 text-blue-800' },
       'in_transit': { label: 'In Transit', color: 'bg-blue-100 text-blue-800' },
