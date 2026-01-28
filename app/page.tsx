@@ -31,7 +31,7 @@ export default function DashboardPage() {
     }
   };
 
-  const checkTracking = async (orderId) => {
+  const checkTracking = async (orderId: string) => {
     try {
       const response = await fetch(`${API_URL}/api/orders/${orderId}/check`, {
         method: 'POST'
@@ -241,7 +241,7 @@ export default function DashboardPage() {
   );
 }
 
-function StatCard({ label, value, color }) {
+function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
   const colorClasses = {
     blue: 'bg-blue-50 text-blue-600',
     green: 'bg-green-50 text-green-600',
@@ -257,7 +257,7 @@ function StatCard({ label, value, color }) {
   );
 }
 
-function AddOrderModal({ onClose, onSuccess }) {
+function AddOrderModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
   const [formData, setFormData] = useState({
     orderId: '',
     trackingNumber: '',
