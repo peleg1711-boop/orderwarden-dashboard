@@ -21,7 +21,6 @@ interface Order {
 export default function DashboardPage() {
   const { isLoaded, isSignedIn } = useUser();
 
-  // Redirect logged-out users to landing page
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
       window.location.href = 'https://landing.orderwarden.com';
@@ -73,180 +72,211 @@ export default function DashboardPage() {
   };
 
   const getRiskColor = (riskLevel: string | null | undefined): string => {
-    if (!riskLevel) return 'bg-gray-100 text-gray-800';
+    if (!riskLevel) return 'bg-gray-100 text-gray-700';
     
     switch (riskLevel.toLowerCase()) {
-      case 'green': return 'bg-green-100 text-green-800';
-      case 'yellow': return 'bg-yellow-100 text-yellow-800';
-      case 'red': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'green': return 'bg-emerald-500 text-white';
+      case 'yellow': return 'bg-amber-400 text-gray-900';
+      case 'red': return 'bg-red-500 text-white';
+      default: return 'bg-gray-100 text-gray-700';
     }
   };
 
   const getStatusBadge = (status: string | null) => {
     const statusMap: Record<string, { label: string; color: string }> = {
-      'pre_transit': { label: 'Pre-Transit', color: 'bg-blue-100 text-blue-800' },
-      'in_transit': { label: 'In Transit', color: 'bg-blue-100 text-blue-800' },
-      'out_for_delivery': { label: 'Out for Delivery', color: 'bg-green-100 text-green-800' },
-      'delivered': { label: 'Delivered', color: 'bg-green-100 text-green-800' },
-      'exception': { label: 'Exception', color: 'bg-red-100 text-red-800' },
-      'delivery_failed': { label: 'Failed', color: 'bg-red-100 text-red-800' },
-      'unknown': { label: 'Unknown', color: 'bg-gray-100 text-gray-800' }
+      'pre_transit': { label: 'Pre-Transit', color: 'bg-blue-500 text-white' },
+      'in_transit': { label: 'In Transit', color: 'bg-blue-500 text-white' },
+      'out_for_delivery': { label: 'Out for Delivery', color: 'bg-emerald-500 text-white' },
+      'delivered': { label: 'Delivered', color: 'bg-emerald-500 text-white' },
+      'exception': { label: 'Exception', color: 'bg-red-500 text-white' },
+      'delivery_failed': { label: 'Failed', color: 'bg-red-500 text-white' },
+      'unknown': { label: 'Unknown', color: 'bg-gray-500 text-white' }
     };
     
     const info = statusMap[status || 'unknown'] || statusMap['unknown'];
-    return <span className={`px-2 py-1 rounded-full text-xs font-medium ${info.color}`}>{info.label}</span>;
+    return <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${info.color}`}>{info.label}</span>;
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading orders...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-yellow-400 border-t-transparent mx-auto mb-4"></div>
+          <p className="text-white text-xl font-bold">Loading your orders...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">OrderWarden</h1>
-              <p className="text-sm text-gray-500">Protect your Etsy shop from refunds</p>
+    <>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap');
+        
+        body {
+          font-family: 'Bricolage Grotesque', sans-serif;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+          font-family: 'Syne', sans-serif;
+        }
+      `}</style>
+      
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-gradient-to-r from-red-600 to-red-700 border-b-4 border-red-800 shadow-xl">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-3xl font-black text-white tracking-tight">OrderWarden</h1>
+                <p className="text-red-100 text-sm font-medium mt-1">Protecting your Etsy shop</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setShowAddOrder(true)}
+                  className="bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-bold text-base hover:bg-yellow-300 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  + Add Order
+                </button>
+                <div className="bg-white rounded-full p-1 shadow-lg">
+                  <UserButton afterSignOutUrl="/sign-in" />
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-4">
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {error && (
+            <div className="bg-red-50 border-l-4 border-red-500 text-red-800 px-6 py-4 rounded-lg mb-6 shadow-md">
+              <div className="flex items-center">
+                <span className="text-2xl mr-3">⚠️</span>
+                <span className="font-semibold">{error}</span>
+              </div>
+            </div>
+          )}
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <StatCard
+              label="Total Orders"
+              value={orders.length}
+              icon="📦"
+              color="from-blue-500 to-blue-600"
+            />
+            <StatCard
+              label="At Risk"
+              value={orders.filter(o => o.riskLevel === 'red' || o.riskLevel === 'yellow').length}
+              icon="⚠️"
+              color="from-yellow-400 to-yellow-500"
+            />
+            <StatCard
+              label="In Transit"
+              value={orders.filter(o => o.lastStatus === 'in_transit').length}
+              icon="🚚"
+              color="from-blue-500 to-blue-600"
+            />
+            <StatCard
+              label="Delivered"
+              value={orders.filter(o => o.lastStatus === 'delivered').length}
+              icon="✅"
+              color="from-emerald-500 to-emerald-600"
+            />
+          </div>
+
+          {/* Orders Table */}
+          {orders.length === 0 ? (
+            <div className="bg-white rounded-2xl shadow-xl p-16 text-center border-2 border-gray-100">
+              <div className="text-6xl mb-6">📭</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">No orders yet</h3>
+              <p className="text-gray-600 text-lg mb-6 max-w-md mx-auto">
+                Add your first order to start tracking deliveries and preventing refunds
+              </p>
               <button
                 onClick={() => setShowAddOrder(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-red-700 hover:to-red-800 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-2xl"
               >
-                + Add Order
+                Add Your First Order
               </button>
-              <UserButton afterSignOutUrl="/sign-in" />
             </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-            {error}
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <StatCard label="Total Orders" value={orders.length} color="blue" />
-          <StatCard
-            label="At Risk"
-            value={orders.filter(o => o.riskLevel === 'red' || o.riskLevel === 'yellow').length}
-            color="yellow"
-          />
-          <StatCard
-            label="In Transit"
-            value={orders.filter(o => o.lastStatus === 'in_transit').length}
-            color="blue"
-          />
-          <StatCard
-            label="Delivered"
-            value={orders.filter(o => o.lastStatus === 'delivered').length}
-            color="green"
-          />
-        </div>
-
-        {orders.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-12 text-center">
-            <div className="text-gray-400 mb-4">
-              <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-              </svg>
+          ) : (
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-gray-100">
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-gradient-to-r from-gray-800 to-gray-900">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Order</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Tracking</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Risk</th>
+                      <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Last Update</th>
+                      <th className="px-6 py-4 text-right text-xs font-bold text-white uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {orders.map((order) => (
+                      <tr key={order.id} className="hover:bg-red-50 transition-colors duration-150">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="font-bold text-gray-900 text-base">{order.orderId}</div>
+                          <div className="text-sm text-gray-500 font-medium">{order.carrier || 'Unknown carrier'}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900 font-mono font-semibold">{order.trackingNumber}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {order.lastStatus ? getStatusBadge(order.lastStatus) : <span className="text-gray-400 font-medium">—</span>}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {order.riskLevel ? (
+                            <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${getRiskColor(order.riskLevel)}`}>
+                              {order.riskLevel}
+                            </span>
+                          ) : <span className="text-gray-400 font-medium">—</span>}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
+                          {order.lastUpdateAt ? new Date(order.lastUpdateAt).toLocaleString() : 'Never'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-bold">
+                          <button
+                            onClick={() => checkTracking(order.id)}
+                            className="text-red-600 hover:text-red-800 hover:underline font-bold"
+                          >
+                            Check Tracking →
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
-            <p className="text-gray-500 mb-4">Add your first order to start tracking</p>
-            <button
-              onClick={() => setShowAddOrder(true)}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Add Order
-            </button>
-          </div>
-        ) : (
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tracking</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Update</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {orders.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{order.orderId}</div>
-                      <div className="text-xs text-gray-500">{order.carrier || 'Unknown'}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 font-mono">{order.trackingNumber}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {order.lastStatus ? getStatusBadge(order.lastStatus) : <span className="text-gray-400">—</span>}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {order.riskLevel ? (
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium uppercase ${getRiskColor(order.riskLevel)}`}>
-                          {order.riskLevel}
-                        </span>
-                      ) : <span className="text-gray-400">—</span>}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {order.lastUpdateAt ? new Date(order.lastUpdateAt).toLocaleString() : 'Never'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button onClick={() => checkTracking(order.id)} className="text-blue-600 hover:text-blue-900">
-                        Check Tracking
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </main>
+          )}
+        </main>
 
-      {showAddOrder && (
-        <AddOrderModal
-          onClose={() => setShowAddOrder(false)}
-          onSuccess={() => {
-            setShowAddOrder(false);
-            fetchOrders();
-          }}
-        />
-      )}
-    </div>
+        {/* Add Order Modal */}
+        {showAddOrder && (
+          <AddOrderModal
+            onClose={() => setShowAddOrder(false)}
+            onSuccess={() => {
+              setShowAddOrder(false);
+              fetchOrders();
+            }}
+          />
+        )}
+      </div>
+    </>
   );
 }
 
-function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
-  const colorClasses: Record<string, string> = {
-    blue: 'bg-blue-50 text-blue-600',
-    green: 'bg-green-50 text-green-600',
-    yellow: 'bg-yellow-50 text-yellow-600',
-    red: 'bg-red-50 text-red-600'
-  };
-
+function StatCard({ label, value, icon, color }: { label: string; value: number; icon: string; color: string }) {
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <div className="text-sm font-medium text-gray-500 mb-2">{label}</div>
-      <div className={`text-3xl font-bold ${colorClasses[color]}`}>{value}</div>
+    <div className={`bg-gradient-to-br ${color} rounded-2xl shadow-lg p-6 transform hover:scale-105 transition-all duration-200 hover:shadow-2xl`}>
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-3xl">{icon}</div>
+        <div className={`text-4xl font-black text-white`}>{value}</div>
+      </div>
+      <div className="text-sm font-bold text-white opacity-90 uppercase tracking-wide">{label}</div>
     </div>
   );
 }
@@ -285,54 +315,60 @@ function AddOrderModal({ onClose, onSuccess }: { onClose: () => void; onSuccess:
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Add New Order</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+    <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-8 transform animate-scale-in">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-black text-gray-900">Add New Order</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+            <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
-            {error}
+          <div className="bg-red-50 border-l-4 border-red-500 text-red-800 px-4 py-3 rounded-lg mb-6">
+            <p className="font-semibold">{error}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Etsy Order ID *</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">
+              Etsy Order ID *
+            </label>
             <input
               type="text"
               required
               value={formData.orderId}
               onChange={(e) => setFormData({ ...formData, orderId: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 font-medium transition-all"
               placeholder="e.g., 1234567890"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tracking Number *</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">
+              Tracking Number *
+            </label>
             <input
               type="text"
               required
               value={formData.trackingNumber}
               onChange={(e) => setFormData({ ...formData, trackingNumber: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 font-mono font-medium transition-all"
               placeholder="e.g., 1Z999AA10123456784"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Carrier (optional)</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">
+              Carrier (optional)
+            </label>
             <select
               value={formData.carrier}
               onChange={(e) => setFormData({ ...formData, carrier: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 font-medium transition-all"
             >
               <option value="">Auto-detect</option>
               <option value="USPS">USPS</option>
@@ -342,18 +378,18 @@ function AddOrderModal({ onClose, onSuccess }: { onClose: () => void; onSuccess:
             </select>
           </div>
 
-          <div className="flex space-x-3 pt-4">
+          <div className="flex space-x-4 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-bold hover:bg-gray-50 transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              className="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl font-bold hover:from-red-700 hover:to-red-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
               {loading ? 'Adding...' : 'Add Order'}
             </button>
