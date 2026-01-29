@@ -139,7 +139,7 @@ export default function DashboardPage() {
                   + Add Order
                 </button>
                 <div className="bg-white rounded-full p-1 shadow-lg">
-                  <UserButton afterSignOutUrl="/sign-in" />
+                  <UserButton afterSignOutUrl="https://landing.orderwarden.com" />
                 </div>
               </div>
             </div>
