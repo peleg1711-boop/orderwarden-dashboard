@@ -358,9 +358,14 @@ export default function DashboardPage() {
                           </button>
                           <button
                             onClick={() => deleteOrder(order.id)}
-                            className="text-red-400 hover:text-red-300 hover:underline font-bold"
+                            className="hover:opacity-70 transition-opacity"
+                            title="Delete order"
                           >
-                            Delete
+                            <img
+                              src="/trash-icon.png"
+                              alt="Delete"
+                              className="w-6 h-6"
+                            />
                           </button>
                         </td>
                       </tr>
