@@ -541,7 +541,7 @@ export default function DashboardPage() {
               
               {/* Risk Filter */}
               <select value={riskFilter} onChange={(e) => setRiskFilter(e.target.value)}
-                className="px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 focus:ring-blue-500">
+                className="px-3 pr-8 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg%20xmlns%3d%22http%3a%2f%2fwww.w3.org%2f2000%2fsvg%22%20viewBox%3d%220%200%2024%2024%22%20fill%3d%22none%22%20stroke%3d%22%2394a3b8%22%20stroke-width%3d%222%22%20stroke-linecap%3d%22round%22%20stroke-linejoin%3d%22round%22%3e%3cpolyline%20points%3d%226%209%2012%2015%2018%209%22%3e%3c%2fpolyline%3e%3c%2fsvg%3e')] bg-[length:16px] bg-[right_8px_center] bg-no-repeat cursor-pointer">
                 <option value="all">All Risks</option>
                 <option value="green">Healthy</option>
                 <option value="yellow">Needs Attention</option>
@@ -550,7 +550,7 @@ export default function DashboardPage() {
               
               {/* Status Filter */}
               <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 focus:ring-blue-500">
+                className="px-3 pr-8 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg%20xmlns%3d%22http%3a%2f%2fwww.w3.org%2f2000%2fsvg%22%20viewBox%3d%220%200%2024%2024%22%20fill%3d%22none%22%20stroke%3d%22%2394a3b8%22%20stroke-width%3d%222%22%20stroke-linecap%3d%22round%22%20stroke-linejoin%3d%22round%22%3e%3cpolyline%20points%3d%226%209%2012%2015%2018%209%22%3e%3c%2fpolyline%3e%3c%2fsvg%3e')] bg-[length:16px] bg-[right_8px_center] bg-no-repeat cursor-pointer">
                 <option value="all">All Statuses</option>
                 <option value="pre_transit">Pre-Transit</option>
                 <option value="in_transit">In Transit</option>
@@ -562,7 +562,7 @@ export default function DashboardPage() {
               
               {/* Date Filter */}
               <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value)}
-                className="px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 focus:ring-blue-500">
+                className="px-3 pr-8 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg%20xmlns%3d%22http%3a%2f%2fwww.w3.org%2f2000%2fsvg%22%20viewBox%3d%220%200%2024%2024%22%20fill%3d%22none%22%20stroke%3d%22%2394a3b8%22%20stroke-width%3d%222%22%20stroke-linecap%3d%22round%22%20stroke-linejoin%3d%22round%22%3e%3cpolyline%20points%3d%226%209%2012%2015%2018%209%22%3e%3c%2fpolyline%3e%3c%2fsvg%3e')] bg-[length:16px] bg-[right_8px_center] bg-no-repeat cursor-pointer">
                 <option value="all">All Time</option>
                 <option value="7days">Last 7 Days</option>
                 <option value="30days">Last 30 Days</option>
